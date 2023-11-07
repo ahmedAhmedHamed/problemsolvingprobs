@@ -13,71 +13,89 @@ struct ListNode {
 class Solution {
 public:
 	ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
-		ListNode *solutionHead;
-		long long n1 = 0;
-		long long n2 = 0;
-		long long sol = 0;
+		ListNode *solutionHead = new ListNode();
+		ListNode *solutionHeadCopy = solutionHead;
+		ListNode *tempNode;
+		ListNode *l1cpy = l1;
+		int value = 0;
+		int digit = 0;
 		if (!l2)
 			return l1;
 		if (!l1)
 			return l2;
-		n1 = getNumber(l1);
-		n2 = getNumber(l2);
-		sol = n1 + n2;
-		solutionHead = getSolHead(sol);
+		while (l1 && l2) {
+			value = l1->val + l2->val;
+			if (value < 10) {
+				solutionHeadCopy->next = new ListNode(value);
+				solutionHeadCopy = solutionHeadCopy->next;
+			}
+			else {
+				digit = value % 10;
+				solutionHeadCopy->next = new ListNode(digit);
+				solutionHeadCopy = solutionHeadCopy->next;
+				tempNode = l1;
+				tempNode = tempNode->next;
+				if (!tempNode)
+					l1->next = new ListNode(1);
+				while (tempNode) {
+					if (tempNode->val < 9)
+					{
+						tempNode->val += 1;
+						break;
+					}
+					tempNode->val = 0;
+					if (tempNode->next == nullptr)
+					{
+						tempNode->next = new ListNode(1);
+						break;
+					}
+					tempNode = tempNode->next;
+				}
+
+			}
+			l1 = l1->next;
+			l2 = l2->next;
+		}
+		while (l1) {
+			solutionHeadCopy->next = l1;
+			solutionHeadCopy = solutionHeadCopy->next;
+			l1 = l1->next;
+		}
+		while (l2) {
+			solutionHeadCopy->next = l2;
+			solutionHeadCopy = solutionHeadCopy->next;
+			l2 = l2->next;
+		}
+		solutionHeadCopy = solutionHead;
+		solutionHead = solutionHead->next;
+		delete solutionHeadCopy;
 		return solutionHead;
-	}
-
-	ListNode *getSolHead(long long sol) {
-		int number;
-		ListNode *solutionList = nullptr;
-		ListNode *solutionListCopy;
-		number = sol % 10;
-		solutionList = new ListNode(number);
-		solutionListCopy = solutionList;
-		sol = sol / 10;
-		while (sol != 0) {
-			number = sol % 10;
-			solutionList->next = new ListNode(number);
-			solutionList = solutionList->next;
-			sol /= 10;
-		}
-		return solutionListCopy;
-	}
-
-	long long getNumber(ListNode *reversedlistnode) {
-		if (!reversedlistnode)
-			return 0;
-		int digit = 1;
-		long long number = 0;
-		while (reversedlistnode) {
-			number += reversedlistnode->val * digit;
-			digit *= 10;
-			reversedlistnode = reversedlistnode->next;
-		}
-		return number;
 	}
 };
 
 int main() {
 	ListNode x;
-	x.val = 1;
+	x.val = 2;
 	ListNode y;
-	y.val = 2;
+	y.val = 4;
 	ListNode z;
 	z.val = 3;
+
 	ListNode xx;
-	xx.val = 1;
+	xx.val = 5;
 	ListNode yy;
-	yy.val = 2;
+	yy.val = 6;
 	ListNode zz;
-	zz.val = 3;
+	zz.val = 4;
+	ListNode xx1;
+	xx1.val = 9;
 
 	x.next = &y;
 	y.next = &z;
 
 	xx.next = &yy;
 	yy.next = &zz;
+//	zz.next = &xx1;
 	Solution s;
 	ListNode *temp = s.addTwoNumbers(&x, &xx);
 	cout << 'x';
