@@ -12,19 +12,19 @@ public:
 	// checking if a character was there before and marking as existing is O(1).
 	// best case can be improved to O(n) when the entire array is comprised of unique characters.
 	int lengthOfLongestSubstring(string s) {
-		int possibleCharacters[255];
+		int possibleCharacters[256];
 		int sequenceNumber = 1;
 		int currentSequenceSize = 0;
 		int maxSequenceSize = 0;
 		int currentCharacterValue;
-		for (int i = -128; i < 128; i ++) {
+		for (int i = 0; i < 256; i ++) {
 			possibleCharacters[i] = -1;
 		}
 		for (int i = 0; i < s.length(); i++) {
 			sequenceNumber = i;
 			currentSequenceSize = 0;
 			for (int j = i; j < s.length(); j++) {
-				currentCharacterValue = int(s[j]);
+				currentCharacterValue = 128 + int(s[j]);
 				if (possibleCharacters[currentCharacterValue] == sequenceNumber) {
 					maxSequenceSize = max(maxSequenceSize, currentSequenceSize);
 					break;
@@ -54,5 +54,6 @@ int main() {
 	cout << sol << '\n';
 	sol = solver.lengthOfLongestSubstring("12312365");
 	cout << sol << '\n';
-	cout << INT_MAX;
+	sol = solver.lengthOfLongestSubstring("12312365");
+	cout << 128 + (127);
 }
